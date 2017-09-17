@@ -1,0 +1,100 @@
+<ion-header>
+  <ion-navbar>
+    <ion-grid >
+      <ion-row>
+        <ion-col col-1>
+            <button ion-button color="light" (click)="toggleWidget()">
+            <ion-icon name="menu"></ion-icon>
+      </button>
+        </ion-col>
+        <ion-col col-2>
+           <select name="drpState" [(ngModel)]="filter.state" required style="width:90%;margin-top:6px;" (change)="getDataBasedOnStateId(filter.state)">
+                  <option value="">SELECT STATE</option>
+                  <option *ngFor='let state of stateList' [ngValue]="state">{{state.Name}}</option>
+            </select>
+        </ion-col>
+         <ion-col col-2>
+            <select name="drpPPD" [(ngModel)]="filter.ppd" required style="width:90%;margin-top:6px;" (change)="getDataBasedOnPPD(filter.ppd)">
+                  <option value="">SELECT PPD</option>
+                  <option *ngFor='let ppd of ppdList' [ngValue]="ppd">{{ppd.PPDName}}</option>
+            </select>
+         </ion-col>
+          <ion-col col-2>
+             <select name="drpCity" [(ngModel)]="filter.city" style="width:90%;margin-top:6px;" (change)="getDataBasedOnCityId(filter.city)">
+                  <option value="">SELECT CITY</option>
+                  <option *ngFor='let city of cityList' [value]="city.Id">{{city.Name}}</option>
+              </select>
+         </ion-col>
+          <ion-col col-2>
+            <select name="drpSchool" [(ngModel)]="filter.school" style="width:90%;margin-top:6px;" (change)="ZoomToSchoole(filter.school,filter.school.Latitude,filter.school.Longitude)">
+                  <option value="">SELECT SCHOOL</option>
+                  <option *ngFor='let school of schoolList' [ngValue]="school">{{school.SchoolCode}}</option>
+            </select>
+         </ion-col>
+         <ion-col col-3>
+             <button ion-button color="primary" (click)="showFilterDialog()" small [disabled]="!this.filter.ppd">Apply Filter</button>
+         </ion-col>
+      </ion-row>
+    </ion-grid>
+
+  </ion-navbar>
+</ion-header>
+
+<ion-content style="position: relative;">
+   <div #map id="map" style="color: dodgerblue"></div>
+   <div #legend id="legend"></div>
+  <div class="rightMenue" [ngClass]="menuClass">
+  
+  <ion-list class="menu" >
+      <div style="text-align: right;">
+        <ion-searchbar (keyup.enter)="someFunction($event)" placeholder="Search(Lat,Long)"></ion-searchbar>
+       
+      </div>
+      <ion-item>
+        <ion-label> BASE STATION <span *ngIf="baseStationGeoList">({{baseStationGeoList.length}})</span></ion-label>
+        <ion-icon name="pin"  item-left style="cursor: pointer;" color="primary"></ion-icon>
+        <ion-toggle [disabled]="!filter.state" [(ngModel)]="mapFilter.baseStation" (ionChange)="changeShowBaseStation()" color="primary"></ion-toggle>
+      </ion-item>
+      <ion-item>
+        <ion-label> YES STORE <span *ngIf="yesGeoList">({{yesGeoList.length}})</span></ion-label>
+        <ion-icon name="pin"  item-left style="cursor: pointer;" color="yel"></ion-icon>
+        <ion-toggle [disabled]="!filter.ppd" [(ngModel)]="mapFilter.yes" (ionChange)="changeShowYesStore()" color="primary"></ion-toggle>
+      </ion-item>
+      
+      <ion-item>
+        <ion-label> SCHOOL  <span *ngIf="schoolGeoList">({{schoolGeoList.length}})</span></ion-label>
+        <ion-icon name="pin"  item-left style="cursor: pointer;" color="darkG"></ion-icon>
+        <ion-toggle [disabled]="!filter.ppd" [(ngModel)]="mapFilter.school" (ionChange)="changeShowSchool()" color="primary"></ion-toggle>
+      </ion-item>
+      <ion-item>
+        <ion-label> WIMAX</ion-label>
+        <ion-toggle [(ngModel)]="mapFilter.wimax" (ionChange)="changeShowWimax()" color="primary"></ion-toggle>
+      </ion-item>
+      <ion-item>
+        <ion-label> LTE</ion-label>
+        <ion-toggle [(ngModel)]="mapFilter.lte" (ionChange)="changeShowLTE()" color="primary"></ion-toggle>
+      </ion-item>
+      <ion-item>
+        <h3>Coverage Status ASN</h3>
+        <p>{{selectedSchoole.SchoolCoverageStatusASN}}</p>
+      </ion-item>
+      <ion-item>
+        <h3>No Of Altitude Teachers</h3>
+        <p>{{selectedSchoole.NoOfAltitudeTeachers}}</p>
+      </ion-item>
+      <ion-item>
+        <h3> No Of Plan Upgrade</h3>
+        <p>{{selectedSchoole.NoOfPlanUpgrade}}</p>
+      </ion-item>
+      <ion-item>
+        <h3> Total AddOn Purchase</h3>
+        <p>{{selectedSchoole.TotalAddOnPurchase}}</p>
+      </ion-item>
+      <ion-item>
+        <h3> No of YESApp Download</h3>
+        <p>{{selectedSchoole.NoofYESAppDownload}}</p>
+      </ion-item>
+</ion-list>
+       
+    </div>
+</ion-content>
